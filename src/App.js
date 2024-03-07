@@ -3,13 +3,15 @@ import { socket } from './socket';
 import { ConnectionManager } from './components/ConnectionManager';
 import { MyForm } from './components/MyForm';
 import { Login } from './components/Login';
+import { GlobalChatWindow } from './components/GlobalChatWindow';
 
 export default function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [message, setMessage] = useState([]);
-  const [usersOnline, setUsersOnline] = useState();
+  const [isConnected, setIsConnected] = useState();
   const [userid, setUserid] = useState();
-  const [duplicateUserid, setDuplicateUserid] = useState();
+
+  const handleUserid = (newState) => {
+    setUserid(newState);
+  };
 
   useEffect(() => {
     function onConnect() {
@@ -20,38 +22,12 @@ export default function App() {
       setIsConnected(false);
     }
 
-    function onMsgRecieved(value) {
-      setMessage(previous => [...previous, value]);
-    }
-
-    function onUsersOnline(value) {
-      setUsersOnline(value);
-    }
-
-    function  onDuplicateUserid(value) {
-      setDuplicateUserid(value);
-    }
-    
-    function onUseridRecieved(value) {
-      setUserid(value);
-    }
-
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
-    
-    socket.on('useridRecieved', onUseridRecieved);
-    socket.on('duplicateUserid', onDuplicateUserid);
-    socket.on('msgRecieved', onMsgRecieved);
-    socket.on('usersOnline', onUsersOnline);
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
-
-      socket.off('useridRecieved', onUseridRecieved);
-      socket.off('duplicateUserid', onDuplicateUserid);
-      socket.off('msgRecieved', onMsgRecieved);
-      socket.off('usersOnline', onUsersOnline);
     };
   }, []);
 
@@ -62,40 +38,19 @@ export default function App() {
     return (
       <div className="App">
         <p>Connected: { '' + isConnected }</p>
-        <ConnectionManager />
+        <ConnectionManager/>
       </div>
     );
   }
 
   if (!userid) {
-    if (duplicateUserid) {
-      return (
-        <div>
-          <p>'{duplicateUserid}' already exists</p>
-          <Login />
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <p>Welcome!</p>      
-          <Login />
-        </div>
-      )  
-    }
+    return <Login onGetUserid={handleUserid}/>
   }
 
   return (
     <div className="App">
       <p>{userid}</p>
-      <p>online: {usersOnline}</p>
-      <ul>
-      {
-        message.map((event, index) =>
-          <li key={ index }>{ event.userid }: { event.data }</li>
-        )
-      }
-      </ul>
+      <GlobalChatWindow />
       <MyForm />
     </div>
   );
