@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { socket } from '../socket';
 
-export function MyForm() {
+export function Login() {
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -9,17 +9,16 @@ export function MyForm() {
     event.preventDefault();
     setIsLoading(true);
 
-    socket.timeout(5000).emit('my_event', value, () => {
+    socket.timeout(5000).emit('useridInput', value, () => {
       setIsLoading(false);
-      setValue('')
     });
   }
 
   return (
     <form onSubmit={ onSubmit }>
-      <input value={value} onChange={ e => setValue(e.target.value) } />
+      <input placeholder="your name please" onChange={ e => setValue(e.target.value) } />
 
-      <button type="submit" disabled={ isLoading }>Submit</button>
+      <button type="submit" disabled={ isLoading }>Join</button>
     </form>
   );
 }
