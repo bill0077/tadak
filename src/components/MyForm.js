@@ -9,7 +9,7 @@ export function MyForm() {
     event.preventDefault();
     setIsLoading(true);
 
-    socket.timeout(5000).emit('my_event', value, () => {
+    socket.timeout(5000).emit('globalChat', value, () => {
       setIsLoading(false);
       setValue('')
     });

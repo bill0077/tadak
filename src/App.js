@@ -4,6 +4,7 @@ import { ConnectionManager } from './components/ConnectionManager';
 import { MyForm } from './components/MyForm';
 import { Login } from './components/Login';
 import { GlobalChatWindow } from './components/GlobalChatWindow';
+import { GameQueueManager } from './components/GameQueueManager';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState();
@@ -50,6 +51,7 @@ export default function App() {
   return (
     <div className="App">
       <p>{userid}</p>
+      <GameQueueManager />
       <GlobalChatWindow />
       <MyForm />
     </div>
