@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/tadak/static/css/main.e6c13ad2.css",
-    "main.js": "/tadak/static/js/main.ca3d8960.js",
+    "main.js": "/tadak/static/js/main.c0981311.js",
     "index.html": "/tadak/index.html",
     "main.e6c13ad2.css.map": "/tadak/static/css/main.e6c13ad2.css.map",
-    "main.ca3d8960.js.map": "/tadak/static/js/main.ca3d8960.js.map"
+    "main.c0981311.js.map": "/tadak/static/js/main.c0981311.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.ca3d8960.js"
+    "static/js/main.c0981311.js"
   ]
 }
