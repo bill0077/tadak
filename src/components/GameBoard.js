@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 
-export function GameBoard({ matchInfo }) {
+export function GameBoard({ matchInfo, userid, onMatchFinished }) {
   const [countdown, setCountdown] = useState(5);
   const [targetWord, setTargetWord] = useState();
   const [currTargetIndex, setCurrTargetIndex] = useState(0);
@@ -12,7 +12,7 @@ export function GameBoard({ matchInfo }) {
 
   useEffect(() => {
     if (countdown === 5) {    
-      socket.timeout(5000).emit('playerReady');
+      socket.timeout(5000).emit('playerReady', {"user_id": userid});
     }
 
     const delayedFunction = () => {
@@ -54,17 +54,22 @@ export function GameBoard({ matchInfo }) {
     if (targetWord.word[currTargetIndex] === input) {
       setMyWordTower(previous => [...previous, input]);
 
-      socket.timeout(5000).emit('wordClear', {"room":matchInfo.room, "clearWord":input});
+      socket.timeout(5000).emit('wordClear', {"user_id": userid, "room":matchInfo.room, "clearWord":input});
       setCurrTargetIndex(currTargetIndex+1)
-      if (currTargetIndex >= targetWord.length-1) {
-        socket.timeout(5000).emit('allClear', {"room":matchInfo.room});
+      if (currTargetIndex >= targetWord.count-1) {
+        socket.timeout(5000).emit('allClear', {"user_id": userid, "room":matchInfo.room});
       }
     }
     
   }
 
   if (winner) {
-    return <p>{winner.winnerId} win!</p>
+    return (
+      <>
+        <p>{winner.winnerId} win!</p>
+        <button onClick={onMatchFinished} type="submit" >Return to Lobby</button>
+      </>
+    );
   }
 
   if (countdown > 0) {

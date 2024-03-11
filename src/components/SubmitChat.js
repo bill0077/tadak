@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { socket } from '../socket';
 
-export function MyForm() {
+export function SubmitChat() {
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 

@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
-import { GameBoard } from './GameBoard';
 
-export function GameQueueManager() {
+export function GameQueueManager({ userid, onGetMatchInfo }) {
   const [isLoading, setIsLoading] = useState(false);
   const [joinedQueue, setJoinedQueue] = useState(false);
   const [isMatched, setIsMatched] = useState(false);
-  const [matchInfo, setMatchInfo] = useState();
 
   useEffect(() => {
     function onGameMatched(value) {
       setIsMatched(true);
-      setMatchInfo(value)
+      onGetMatchInfo(value);
     }
 
     socket.on('gameMatched', onGameMatched);
@@ -25,7 +23,7 @@ export function GameQueueManager() {
     event.preventDefault();
     setIsLoading(true);
 
-    socket.timeout(5000).emit('joinGameQueue', () => {
+    socket.timeout(5000).emit('joinGameQueue', {'user_id': userid}, () => {
       setIsLoading(false);
       setJoinedQueue(true);
     });
@@ -38,7 +36,7 @@ export function GameQueueManager() {
   }
 
   if (isMatched) {
-    return <GameBoard matchInfo={matchInfo}/>
+    return <p>Game Matched!</p>
   } else {
     return <p>Game Matching...</p>
   }

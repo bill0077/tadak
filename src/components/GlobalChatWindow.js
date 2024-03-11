@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { SubmitChat } from './SubmitChat'
 import { socket } from '../socket';
 
 export function GlobalChatWindow() {
@@ -17,12 +18,15 @@ export function GlobalChatWindow() {
   });
 
   return (
-    <ul>
-      {
-        message.map((event, index) =>
-          <li key={ index }>{ event.userid }: { event.data }</li>
-        )
-      }
-    </ul>
+    <>
+      <ul>
+        {
+          message.map((event, index) =>
+            <li key={ index }>{ event.userid }: { event.data }</li>
+          )
+        }
+      </ul>
+      <SubmitChat />
+    </>
   );
 }
